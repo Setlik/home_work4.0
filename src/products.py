@@ -2,7 +2,7 @@ class Product:
     def __init__(self, name: str, description: str, price: float, quantity: int):
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
 
     @classmethod
@@ -16,14 +16,14 @@ class Product:
 
     @property
     def price(self) -> float:
-        return self._price  # Геттер для цены
+        return self.__price  # Геттер для цены
 
     @price.setter
     def price(self, value: float):
         if value <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
-            self._price = value  # Сеттер для цены
+            self.__price = value  # Сеттер для цены
 
 
 class Category:
@@ -38,15 +38,21 @@ class Category:
         Category.category_count += 1
         Category.product_count += len(self.__products)
 
+
     def add_product(self, product: Product):
         """Добавляет продукт в категорию и обновляет счетчик продуктов."""
         self.__products.append(product)
         Category.product_count += 1
 
+
     @property
     def products(self) -> str:
         """Геттер для получения списка продуктов в виде строки."""
-        return "\n".join(str(product) for product in self.__products)
+        return "\n".join(
+            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт."
+            for product in self.__products
+        )
+
 
     def __len__(self):
-        return len(self._products)
+        return len(self.__products)
