@@ -25,6 +25,14 @@ class Product:
         else:
             self.__price = value  # Сеттер для цены
 
+    def __str__(self) -> str:
+        return f"{self.name}, количество продуктов: {self.quantity} шт."
+
+    def __add__(self, other):
+        if isinstance(other, Product):
+            return (self.price * self.quantity) + (other.price * other.quantity)
+        return NotImplemented
+
 
 class Category:
     category_count = 0
@@ -53,3 +61,7 @@ class Category:
 
     def __len__(self):
         return len(self.__products)
+
+    def __str__(self) -> str:
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
