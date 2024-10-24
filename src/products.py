@@ -26,7 +26,7 @@ class Product:
             self.__price = value  # Сеттер для цены
 
     def __str__(self) -> str:
-        return f"{self.name}, количество продуктов: {self.quantity} шт."
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
         if isinstance(other, Product):
