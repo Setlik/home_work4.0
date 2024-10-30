@@ -29,9 +29,36 @@ class Product:
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if isinstance(other, Product):
+        if isinstance(other, type(self)):
             return (self.price * self.quantity) + (other.price * other.quantity)
         return NotImplemented
+
+
+class Smartphone(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: str, model: str,
+                 memory: int, color: str):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+    def __str__(self):
+        return (f"{super().__str__()} Модель: {self.model}, Память: {self.memory} ГБ,"
+                f" Цвет: {self.color}, Производительность: {self.efficiency}")
+
+
+class LawnGrass(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: int,
+                 color: str):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+    def __str__(self):
+        return (f"{super().__str__()} Страна: {self.country}, "
+                f"Срок прорастания: {self.germination_period} дней, Цвет: {self.color}")
 
 
 class Category:
@@ -48,8 +75,11 @@ class Category:
 
     def add_product(self, product: Product):
         """Добавляет продукт в категорию и обновляет счетчик продуктов."""
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError
 
     @property
     def products(self) -> str:
@@ -64,4 +94,4 @@ class Category:
 
     def __str__(self) -> str:
         total_quantity = sum(product.quantity for product in self.__products)
-        return f"{self.name}, количество продуктов: {total_quantity} шт."
+        return f"({self.name}, количество продуктов: {total_quantity} шт.)"
