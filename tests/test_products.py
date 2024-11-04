@@ -1,6 +1,10 @@
+from unittest.mock import patch
+
 import pytest
 
-from src.products import Category, Product
+from src.base_product import BaseProduct
+from src.category import Category
+from src.products import Product
 
 
 def test_product_initialization(sample_product):
@@ -13,7 +17,6 @@ def test_product_initialization(sample_product):
 def test_initialization(sample_category):
     assert sample_category.name == "Смартфоны"
     assert sample_category.description == 'Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни'
-    # assert len(sample_category.products) == 1
 
 
 def test_category_count_increment(sample_category):
@@ -31,12 +34,12 @@ def test_product_count_increment(sample_category):
 
 def test_price_setter_negative(sample_product):
     sample_product.price = -50
-    assert ("Цена не должна быть нулевая или отрицательная")
+    assert "Цена не должна быть нулевая или отрицательная"
 
 
 def test_price_setter_zero(sample_product):
     sample_product.price = 0
-    assert ("Цена не должна быть нулевая или отрицательная")
+    assert "Цена не должна быть нулевая или отрицательная"
 
 
 def test_price_setter_positive(sample_product):
@@ -104,3 +107,16 @@ def test_product_addition_wrong_type(sample_category):
 def test_product_sum_same_type(sample_product):
     expected_value = 2 * sample_product.price * sample_product.quantity
     assert expected_value == sample_product.price * sample_product.quantity * 2
+
+
+def test_product_info(sample_product):
+    product = sample_product
+    info = product.get_product_info()
+    expected_info = "Name: Samsung Galaxy S23 Ultra, Description: 256GB, Серый цвет, 200MP камера, Price: 180000.0, Quantity: 5"
+    assert info == expected_info
+
+
+def test_creation_logging():
+    with patch("builtins.print") as mocked_print:
+        product = Product("Logger Product", "Logging this product", 100.0, 5)
+        mocked_print.assert_called_once()

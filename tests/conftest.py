@@ -1,6 +1,7 @@
 import pytest
 
-from src.products import Category, Product, Smartphone, LawnGrass
+from src.category import Category
+from src.products import Product, Smartphone, LawnGrass
 
 
 @pytest.fixture
@@ -37,17 +38,10 @@ def sample_category(sample_product):
                     products=[sample_product])
 
 
-@pytest.fixture
-def test_products():
-    product_a = Product(name='Товар A', description='Описание A', price=100.0, quantity=10)
-    product_b = Product(name='Товар B', description='Описание B', price=200.0, quantity=2)
-    product_c = Product(name='Товар C', description='Описание C', price=50.0, quantity=5)
-    return [product_a, product_b, product_c]
-
 
 @pytest.fixture
-def test_category(test_products):
+def test_category(test_product):
     category = Category(name='Категория 1', description='Описание категории 1')
-    for product in test_products:
+    for product in test_product:
         category.add_product(product)
     return category
