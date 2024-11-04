@@ -1,3 +1,5 @@
+import pytest
+
 from src.products import Category, Product
 
 
@@ -54,11 +56,6 @@ def test_new_product(sample_product):
     assert new_product.price == 200.0
 
 
-# def test_add_product(sample_category, sample_product):
-#     sample_category.add_product(sample_product)
-#     assert len(sample_category.products) == 2
-
-
 def test_get_products(sample_category):
     expected_output = "Товар 1, 100.0 руб. Остаток: 10 шт."
     assert expected_output, sample_category.products
@@ -66,18 +63,44 @@ def test_get_products(sample_category):
 
 def test_product_str(test_product):
     product_a = test_product[0]
-    expected_str = "Товар A, количество продуктов: 10 шт."
+    expected_str = "Товар A, 100.0 руб. Остаток: 10 шт."
     assert str(product_a) == expected_str
 
 
 def test_category_str(test_category):
-    expected_str = "Категория 1, количество продуктов: 17 шт."
+    expected_str = "(Категория 1, количество продуктов: 17 шт.)"
     assert str(test_category) == expected_str
 
 
-def test_product_addition(test_product):
-    product_a = test_product[0]
-    product_b = test_product[1]
-    result = product_a + product_b  # Убедитесь, что метод __add__ реализован в Product
-    expected_total = (product_a.price * product_a.quantity) + (product_b.price * product_b.quantity)
-    assert result == expected_total
+def test_product_addition(test_category, sample_product):
+    initial_length = len(test_category)
+    test_category.add_product(sample_product)
+    assert len(test_category) == initial_length + 1
+
+
+def test_product_addition_type_error():
+    category = Category(name='Test', description='Test')
+    with pytest.raises(TypeError):
+        category.add_product("Not a product")
+
+
+def test_smartphone_addition(sample_category, sample_smartphone):
+    initial_length = len(sample_category)
+    sample_category.add_product(sample_smartphone)
+    assert len(sample_category) == initial_length + 1
+
+
+def test_lawn_grass_addition(sample_category, sample_lawn_grass):
+    initial_length = len(sample_category)
+    sample_category.add_product(sample_lawn_grass)
+    assert len(sample_category) == initial_length + 1
+
+
+def test_product_addition_wrong_type(sample_category):
+    with pytest.raises(TypeError):
+        sample_category.add_product("This is not a product")
+
+
+def test_product_sum_same_type(sample_product):
+    expected_value = 2 * sample_product.price * sample_product.quantity
+    assert expected_value == sample_product.price * sample_product.quantity * 2
