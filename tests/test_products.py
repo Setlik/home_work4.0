@@ -2,7 +2,6 @@ from unittest.mock import patch
 
 import pytest
 
-from src.base_product import BaseProduct
 from src.category import Category
 from src.products import Product
 
@@ -16,7 +15,8 @@ def test_product_initialization(sample_product):
 
 def test_initialization(sample_category):
     assert sample_category.name == "Смартфоны"
-    assert sample_category.description == 'Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни'
+    assert sample_category.description == ('Смартфоны, как средство не только '
+                                           'коммуникации, но и получения дополнительных функций для удобства жизни')
 
 
 def test_category_count_increment(sample_category):
@@ -112,11 +112,20 @@ def test_product_sum_same_type(sample_product):
 def test_product_info(sample_product):
     product = sample_product
     info = product.get_product_info()
-    expected_info = "Name: Samsung Galaxy S23 Ultra, Description: 256GB, Серый цвет, 200MP камера, Price: 180000.0, Quantity: 5"
+    expected_info = ("Name: Samsung Galaxy S23 Ultra, Description: 256GB, "
+                     "Серый цвет, 200MP камера, Price: 180000.0, Quantity: 5")
     assert info == expected_info
 
 
 def test_creation_logging():
     with patch("builtins.print") as mocked_print:
-        product = Product("Logger Product", "Logging this product", 100.0, 5)
+        Product("Logger Product", "Logging this product", 100.0, 5)
         mocked_print.assert_called_once()
+
+
+def test_middle_price_empty_category(empty_category):
+    assert empty_category.middle_price() == 0.0
+
+
+def test_middle_price_filled_category(filled_category):
+    assert filled_category.middle_price() == pytest.approx(150.0, rel=1e-6)
