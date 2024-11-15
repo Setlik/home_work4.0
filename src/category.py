@@ -35,3 +35,14 @@ class Category:
     def __str__(self) -> str:
         total_quantity = sum(product.quantity for product in self.__products)
         return f"({self.name}, количество продуктов: {total_quantity} шт.)"
+
+    def middle_price(self) -> float:
+        """Возвращает среднюю цену всех продуктов в категории."""
+        try:
+            total_price = sum(product.price for product in self.__products)
+            total_count = len(self.__products)
+            if total_count == 0:  # Проверка на случай, если товаров нет
+                raise ZeroDivisionError("Нет продуктов в категории для расчета средней цены.")
+            return total_price / total_count
+        except ZeroDivisionError:
+            return 0.0

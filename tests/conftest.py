@@ -38,10 +38,24 @@ def sample_category(sample_product):
                     products=[sample_product])
 
 
-
 @pytest.fixture
 def test_category(test_product):
     category = Category(name='Категория 1', description='Описание категории 1')
     for product in test_product:
         category.add_product(product)
+    return category
+
+
+@pytest.fixture
+def empty_category():
+    return Category(name="Пустая категория", description="Описание пустой категории")
+
+
+@pytest.fixture
+def filled_category():
+    product1 = Product(name="Товар 1", description="Описание товара 1", price=100.0, quantity=5)
+    product2 = Product(name="Товар 2", description="Описание товара 2", price=200.0, quantity=3)
+    category = Category(name="Заполненная категория", description="Описание заполненной категории")
+    category.add_product(product1)
+    category.add_product(product2)
     return category

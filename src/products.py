@@ -4,6 +4,8 @@ from src.logger_mixin import CreationLoggerMixin
 
 class Product(CreationLoggerMixin, BaseProduct):
     def __init__(self, name: str, description: str, price: float, quantity: int):
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__(name, description, price, quantity)
 
     def get_product_info(self) -> str:
@@ -22,7 +24,7 @@ class Product(CreationLoggerMixin, BaseProduct):
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if type(other) is self.__class__:
+        if isinstance(other, self.__class__):
             return (self.price * self.quantity) + (other.price * other.quantity)
         raise TypeError
 
